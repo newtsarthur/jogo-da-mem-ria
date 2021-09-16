@@ -1,0 +1,137 @@
+<!DOCTYPE html lang="pt-br">
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial scale=1.0">
+        <title> jogo da memoria</title>
+        <style>
+            h1,p {
+                text-align: center;
+            }
+            #grade {
+                display: flex;
+                flex-wrap: wrap;
+                width: 520px;
+                margin: auto;
+            }
+            img {
+                width: 130px;
+            }
+        </style>
+    </head>
+    <body onload="criarGrade()">
+        <h1>Jogo da memória</h1>
+        <p>Pontos: <span id="pontos"></span></p>
+        <div id="grade"></div>
+        <script>
+            const baralho = [
+                {
+                    nome: "flor",
+                    img: "flor.png"
+                },
+                {
+                    nome: "musgo",
+                    img: "musgo.png"
+                },
+                {
+                    nome: "pinheiro",
+                    img: "pinheiro.png"
+                },
+                {
+                    nome: "planta-cobra",
+                    img: "planta-cobra.png"
+                },
+                {
+                    nome: "samambaia",
+                    img: "samambaia.png"
+                },
+                {
+                    nome: "cacto",
+                    img: "cacto.png"
+                },
+                {
+                    nome: "flor",
+                    img: "flor.png"
+                },
+                {
+                    nome: "musgo",
+                    img: "musgo.png"
+                },
+                {
+                    nome: "pinheiro",
+                    img: "pinheiro.png"
+                },
+                {
+                    nome: "planta-cobra",
+                    img: "planta-cobra.png"
+                },
+                {
+                    nome: "samambaia",
+                    img: "samambaia.png"
+                },
+                {
+                    nome: "cacto",
+                    img: "cacto.png"
+                }
+            ];
+        
+        baralho.sort(()=>{
+            return 0.5 - Math.random();
+        });
+        const grade = document.querySelector("#grade");
+        const pontuacao = document.querySelector("#pontos");
+        let ponto;
+        let escolhidas = [];
+
+        function criarGrade() {
+            ponto = 0;
+            pontuacao.innerText = ponto;
+            for(let i = 0; i < baralho.length; i++){
+                let carta = document.createElement("img");
+                carta.id = i;
+                carta.name = baralho[i].nome;
+                carta.src = "verso.jpg"
+                carta.addEventListener("click", escolherCarta);
+                grade.appendChild(carta);
+            }
+        }
+
+        function escolherCarta() {
+            let carta = this;
+            carta.src = baralho[carta.id].img;
+            escolhidas.push(carta);
+
+            if(escolhidas.length == 2) {
+                setTimeout(() => {
+                    let carta1 = escolhidas[0];
+                    let carta2 = escolhidas[1];
+
+                    if(carta1.name == carta2.name) {
+                        carta1.src = "branco.png";
+                        carta2.src = "branco.png";
+                        carta1.removeEventListener("click",escolherCarta);
+                        carta2.removeEventListener("click",escolherCarta);
+                        ponto++;
+                        pontuacao.innerText = ponto;
+                    }else{
+                        carta1.src = "verso.jpg";
+                        carta2.src = "verso.jpg";
+                    }
+
+                    if(ponto == baralho.length / 2) {
+                        alert("Muito bem! Você achou todos os pares!");
+                        grade.innerHTML = "";
+                        baralho.sort(()=>{
+                            return 0.5 - Math.random();
+                        });
+                        criarGrade();
+                    }
+
+                    escolhidas = [];
+                },850);
+            }
+        }
+
+        </script>
+    </body>
+</html>
